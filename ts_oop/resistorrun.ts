@@ -37,3 +37,4 @@ console.log(r1.tempdiff(5) + inittemp)
 
 //lõpptemp = 34.3
 // veekeedukannu takistus = 4.5
+//
