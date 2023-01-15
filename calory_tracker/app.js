@@ -30,6 +30,16 @@ const StorageCtrl = (function (){
                 items[id] = newItem
                 localStorage.setItem("items", JSON.stringify(items))
             }
+        },
+        delItemFromLS: function (id){
+            if (localStorage.getItem("items") === null) {
+
+            } else {
+                let items;
+                items = JSON.parse(localStorage.getItem("items"))
+                items.splice(id,1)
+                localStorage.setItem("items", JSON.stringify(items))
+            }
         }
     }
 })();
@@ -96,7 +106,8 @@ const UICtrl = (function (){
         itemCaloriesInput: '#item-calories',
         addBtn: '.add-btn',
         totalCalories: '.total-calories',
-        editBtn: '.edit-btn'
+        editBtn: '.edit-btn',
+        deleteBtn: '.del-btn'
     }
     return {
         populateItemList: function (items){
@@ -145,6 +156,7 @@ const App = (function (itemCtrl, StorageCtrl, UICtrl){
         document.addEventListener('DOMContentLoaded', getItemsFromStorage);
         document.querySelector(UISelectors.editBtn).addEventListener('click',update);
         document.querySelector("ul").addEventListener("click", updatecalory);
+        document.querySelector(UISelectors.deleteBtn).addEventListener("click", delItem)
 
     }
 
@@ -165,6 +177,7 @@ const App = (function (itemCtrl, StorageCtrl, UICtrl){
         if(event.target.className === "edit-item fa fa-pencil"){
             document.querySelector(UISelector.editBtn).style.display = "inline"
             document.querySelector(UISelector.addBtn).style.display = "none"
+            document.querySelector(UISelector.deleteBtn).style.display = "inline"
             event.target.parentElement.parentElement.id = "item-update"
             const itemToEdit = itemCtrl.getItems(id)
             itemCtrl.setCurrentItem(itemToEdit)
@@ -187,8 +200,20 @@ const App = (function (itemCtrl, StorageCtrl, UICtrl){
             StorageCtrl.changeItemFromLS(NewID, newItem)
             document.querySelector(UISelector.addBtn).style.display = "inline"
             document.querySelector(UISelector.editBtn).style.display = "none"
+            document.querySelector(UISelector.deleteBtn).style.display = "none"
             event.preventDefault()
         }
+    }
+    const delItem = function (){
+        const list = document.querySelector("#item-list")
+        const UISelect = UICtrl.getSelectors()
+        var nodes = Array.from(list.children)
+        delID = nodes.indexOf(document.querySelector("#item-update"))
+        StorageCtrl.delItemFromLS(delID)
+        list.removeChild(list.children[delID])
+        document.querySelector(UISelect.addBtn).style.display = "inline"
+        document.querySelector(UISelect.editBtn).style.display = "none"
+        document.querySelector(UISelect.deleteBtn).style.display = "none"
     }
     const getItemsFromStorage = function (){
         const items = StorageCtrl.getItemsFromStorage()
