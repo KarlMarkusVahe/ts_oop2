@@ -39,7 +39,7 @@ class SeriesCircuit {
     }
 }
 
-let r1: Resistor = new Resistor(110)
+let r1: Resistor = new Resistor(220)
 let sc1: SeriesCircuit = new SeriesCircuit();
 sc1.push(new Resistor(220));
 sc1.push(new Resistor(220));
