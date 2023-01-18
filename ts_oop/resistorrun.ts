@@ -12,29 +12,39 @@ class Resistor {
     getPower(u: number): number {
         return u * this.getCurrent(u);
     }
-    getHeat(u: number): number {
-        return v ** 2 / this.r;
-    }
-    tempdiff(u: number): number {
-        return watt / (waterheat * watermass);
-
+    getResistance(): number {
+        return this.r;
     }
 }
 
-let v = 1000
-let I = 220
-let waterheat = 4186
-let watermass = 1
-let watt = 60000
-let inittemp = 20
-let r1 = new Resistor(v / I);
-console.log(r1);
-console.log(r1.getCurrent(220));
-console.log(r1.getPower(1000));
-console.log(r1.getHeat(5));
-console.log(r1.tempdiff(5))
-console.log(r1.tempdiff(5) + inittemp)
+class SeriesCircuit {
+    resistors: Resistor[] = []
+    push(r: Resistor) {
+        this.resistors.push(r);
+    }
+    getTotalResistance() {
+        let sum: number = 0;
+        this.resistors.forEach((r: Resistor) => { sum += r.getResistance() });
+        return sum;
+    }
+    getTotalCurrent(u: number) {
+        return u / this.getTotalResistance();
+    }
 
-//lõpptemp = 34.3
-// veekeedukannu takistus = 4.5
-//
+    getTotalvoltage(u: number) {
+        return (this.getTotalCurrent(u) * 100);
+    }
+    getTotalPower(u: number) {
+        return this.getTotalvoltage(u) * this.getTotalCurrent(u)
+    }
+}
+
+let sc1: SeriesCircuit = new SeriesCircuit();
+sc1.push(new Resistor(220));
+sc1.push(new Resistor(220));
+sc1.push(new Resistor(110));
+console.log(sc1.getTotalResistance());
+console.log(sc1.getTotalCurrent(12));
+// get voltage u = getCurrent u 
+console.log(sc1.getTotalvoltage(12))
+console.log(sc1.getTotalPower(12))
