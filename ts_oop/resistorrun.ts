@@ -39,6 +39,7 @@ class SeriesCircuit {
     }
 }
 
+let r1: Resistor = new Resistor(110)
 let sc1: SeriesCircuit = new SeriesCircuit();
 sc1.push(new Resistor(220));
 sc1.push(new Resistor(220));
@@ -48,3 +49,4 @@ console.log(sc1.getTotalCurrent(12));
 // get voltage u = getCurrent u 
 console.log(sc1.getTotalvoltage(12))
 console.log(sc1.getTotalPower(12))
+console.log(r1.getCurrent(12))
